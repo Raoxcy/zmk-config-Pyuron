@@ -5,12 +5,9 @@
 
 #define MOUSE 6
 
-
-/* マウスレイヤー自動切り替え（クリック以外で通常に戻る）の設定 */
-&pinctrl { };
 / {
     behaviors {
-        // マウスレイヤー滞在中に「クリック以外のキー」を押したら、そのキーを入力しつつレイヤー0に戻す設定
+        // マウスレイヤー（6）滞在中に通常キーを押したら、その文字を入力しつつ即座に通常レイヤー（0）に引き戻す設定
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
@@ -19,23 +16,32 @@
         };
     };
 
-    // コンボ設定（同時押し）
+    // 同時押し（コンボ）設定
     combos {
         compatible = "zmk,combos";
 
         // ① 左手 D + F 同時押しで「英語入力」に切り替え
         combo_lang_en {
             timeout-ms = <50>;
-            key-positions = <12 13>; // D(12) と F(13) の位置
-            bindings = <&kp LANG2>;  // Mac/Windows共通：英数/Alt+`相当
+            key-positions = <12 13>; // D(12) と F(13) の物理位置
+            bindings = <&kp LANG2>;  // Macの英数キー / WindowsのIMEオフ（Alt+`）相当
         };
 
         // ② 右手 J + K 同時押しで「日本語入力」に切り替え
         combo_lang_ja {
             timeout-ms = <50>;
-            key-positions = <16 17>; // J(16) と K(17) の位置
-            bindings = <&kp LANG1>;  // Mac/Windows共通：かな/ひらがな相当
+            key-positions = <16 17>; // J(16) と K(17) の物理位置
+            bindings = <&kp LANG1>;  // Macのかなキー / WindowsのIMEオン（ひらがな）相当
         };
+    };
+
+    // マウスレイヤー滞在中のホールド・タップ設定
+    lt_to_layer_0: lt_to_layer_0 {
+        compatible = "zmk,behavior-hold-tap";
+        label = "LAYER_TAP_TO_0";
+        bindings = <&mo>, <&to_layer_0>;
+        #binding-cells = <2>;
+        tapping-term-ms = <200>;
     };
 };
 
@@ -43,8 +49,75 @@
     keymap {
         compatible = "zmk,keymap";
 
+        // レイヤー 0：通常文字入力
         default_layer {
             bindings = <
 &kp Q             &kp W      &kp E      &kp R         &kp T           &kp Y        &kp U          &kp I        &kp O              &kp P
 &kp A             &kp S      &kp D      &kp F         &kp G           &kp H        &kp J          &kp K        &kp L              &kp SQT
-&mt LEFT_SHIFT Z  &kp X      &kp C      &kp V         &kp B           &lt 4 COLON  &kp BACKSLASH  &kp N        &"https://github.com"
+&mt LEFT_SHIFT Z  &kp X      &kp C      &kp V         &kp B           &lt 4 COLON  &kp BACKSLASH  &kp N        &kp M              &kp COMMA
+&kp DOT           &kp SLASH  &kp LCTRL  &kp LEFT_WIN  &lt 2 LEFT_ALT  &lt 3 SPACE  &kp BACKSPACE  &lt 1 ENTER  &kp RIGHT_CONTROL  &kp DEL
+            >;
+        };
+
+        // レイヤー 1：ファンクションキー
+        layer_1 {
+            bindings = <
+&trans  &trans   &trans  &trans  &trans  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5
+&trans  &trans   &trans  &trans  &trans  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10
+&trans  &trans   &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &kp F11  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp F12
+            >;
+        };
+
+        // レイヤー 2：数字・記号
+        layer_2 {
+            bindings = <
+&kp MINUS                   &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp PLUS      &kp CARET        &kp AMPERSAND  &kp TILDE         &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS
+&kp SLASH                   &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp ASTERISK  &kp EXCLAMATION  &kp AT_SIGN    &kp HASH          &kp DOLLAR            &kp PERCENT
+&mt LEFT_SHIFT KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp PERIOD    &kp EQUAL        &trans         &kp LEFT_BRACKET  &kp RIGHT_BRACKET     &kp LEFT_BRACE
+&kp RIGHT_BRACE             &kp BACKSLASH    &trans           &trans           &trans        &trans           &trans         &trans            &trans                &kp PIPE
+            >;
+        };
+
+        // レイヤー 3：移動・ショートカット
+        layer_3 {
+            bindings = <
+&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp LC(TAB)              &trans   &trans  &trans  &trans  &trans  &trans
+&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END  &trans  &trans  &trans  &trans  &trans
+&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &trans          &kp LG(LS(RIGHT_ARROW))  &trans   &trans  &trans  &trans  &trans  &trans
+&trans          &trans                  &trans          &trans                   &trans   &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        // レイヤー 4：Bluetooth設定
+        layer_4 {
+            bindings = <
+&trans  &trans      &trans  &trans  &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+&trans  &trans      &trans  &trans  &trans  &trans        &trans        &trans        &trans        &trans
+&trans  &trans      &trans  &trans  &trans  &trans        &bootloader   &trans        &trans        &trans
+&trans  &bt BT_CLR  &trans  &trans  &trans  &trans        &trans        &trans        &trans        &bt BT_CLR_ALL
+            >;
+        };
+
+        // レイヤー 5：未使用
+        layer_5 {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        // レイヤー 6：MOUSE（トラックボール操作用）
+        // クリック以外の通常キーを押すと、文字を入力しつつ自動で通常レイヤー(0)に戻ります
+        MOUSE {
+            bindings = <
+&to_layer_0 Q             &to_layer_0 W      &to_layer_0 E      &to_layer_0 R         &to_layer_0 T           &to_layer_0 Y        &to_layer_0 U          &to_layer_0 I        &to_layer_0 O              &to_layer_0 P
+&to_layer_0 A             &to_layer_0 S      &to_layer_0 D      &to_layer_0 F         &to_layer_0 G           &to_layer_0 H        &mkp MB1               &mkp MB3             &mkp MB2                   &to_layer_0 SQT
+&to_layer_0 LEFT_SHIFT    &to_layer_0 X      &to_layer_0 C      &to_layer_0 V         &to_layer_0 B           &lt_to_layer_0 4 COLON &to_layer_0 BACKSLASH &to_layer_0 N        &to_layer_0 M              &to_layer_0 COMMA
+&to_layer_0 DOT           &to_layer_0 SLASH  &to_layer_0 LCTRL  &to_layer_0 LEFT_WIN  &lt_to_layer_0 2 LEFT_ALT &lt_to_layer_0 3 SPACE &to_layer_0 BACKSPACE  &lt_to_layer_0 1 ENTER &to_layer_0 RIGHT_CONTROL  &to_layer_0 DEL
+            >;
+        };
+    };
+};
