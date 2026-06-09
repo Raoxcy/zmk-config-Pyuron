@@ -87,18 +87,17 @@
             >;
         };
 
-        // レイヤー 4：MOUSE（トラックボールを動かすと自動的にこの部屋に切り替わります）
-        // クリック以外の通常キーを押すと、文字を入力しつつ自動で通常レイヤー(0)に戻ります
+        // レイヤー 4：MOUSE（最新のクリックコードに修正）
         layer_4 {
             bindings = <
 &to_layer_0 Q             &to_layer_0 W      &to_layer_0 E      &to_layer_0 R         &to_layer_0 T           &to_layer_0 Y        &to_layer_0 U          &to_layer_0 I        &to_layer_0 O              &to_layer_0 P
-&to_layer_0 A             &to_layer_0 S      &to_layer_0 D      &to_layer_0 F         &to_layer_0 G           &to_layer_0 H        &mkp MB1               &mkp MB3             &mkp MB2                   &to_layer_0 SQT
+&to_layer_0 A             &to_layer_0 S      &to_layer_0 D      &to_layer_0 F         &to_layer_0 G           &to_layer_0 H        &mkp LCLK              &mkp MCLK            &mkp RCLK                  &to_layer_0 SQT
 &to_layer_0 LEFT_SHIFT    &to_layer_0 X      &to_layer_0 C      &to_layer_0 V         &to_layer_0 B           &lt_to_layer_0 5 COLON &to_layer_0 BACKSLASH &to_layer_0 N        &to_layer_0 M              &to_layer_0 COMMA
 &to_layer_0 DOT           &to_layer_0 SLASH  &to_layer_0 LCTRL  &to_layer_0 LEFT_WIN  &lt_to_layer_0 2 LEFT_ALT &lt_to_layer_0 3 SPACE &to_layer_0 BACKSPACE  &lt_to_layer_0 1 ENTER &to_layer_0 RIGHT_CONTROL  &to_layer_0 DEL
             >;
         };
 
-        // レイヤー 5：Bluetooth設定（レイヤー0のCOLONキー長押しでここに入ります）
+        // レイヤー 5：Bluetooth設定
         layer_5 {
             bindings = <
 &trans  &trans      &trans  &trans  &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
