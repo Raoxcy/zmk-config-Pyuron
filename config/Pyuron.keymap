@@ -5,7 +5,7 @@
 
 / {
     behaviors {
-        // 通常キーを押したら、その文字を入力しつつ即座に通常レイヤー（0）に引き戻す設定
+        // マウスレイヤー内で文字キーを押した時だけ、その文字を入力しつつ自動で通常レイヤー(0)に戻す設定
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
@@ -87,7 +87,7 @@
             >;
         };
 
-        // レイヤー 4：MOUSE（最新のクリックコードに修正）
+        // レイヤー 4：MOUSE（クリックキーは「to_layer_0」を外して純粋なクリック単体に修正）
         layer_4 {
             bindings = <
 &to_layer_0 Q             &to_layer_0 W      &to_layer_0 E      &to_layer_0 R         &to_layer_0 T           &to_layer_0 Y        &to_layer_0 U          &to_layer_0 I        &to_layer_0 O              &to_layer_0 P
