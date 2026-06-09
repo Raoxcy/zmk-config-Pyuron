@@ -44,13 +44,11 @@
         tapping-term-ms = <200>;
     };
 
-    // 【★ここを追加】トラックボールを動かしたときに、自動でMOUSEレイヤー（レイヤー6）に切り替える設定
+    // 【修正箇所】トラックボールが動いたら自動でMOUSEレイヤー（レイヤー6）に切り替える設定
     trackball_listener {
         compatible = "zmk,input-listener";
-        device = <&pd0>; // 元リポジトリで定義されているトラックボールセンサーのID
-        layers = <0 1 2 3 4 5>; // どのレイヤーにいても反応する設定
-        
-        // トラックボールが動いたら MOUSE（レイヤー6）を一時的に有効にする
+        device = <&trackball>; // 「pd0」から元データ通りの「trackball」に修正
+        layers = <0 1 2 3 4 5>;
         bindings = <&ib_tog_layer MOUSE>; 
     };
 };
