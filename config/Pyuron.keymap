@@ -23,15 +23,15 @@
         // ① 左手 D + F 同時押しで「英語入力」に切り替え
         combo_lang_en {
             timeout-ms = <50>;
-            key-positions = <12 13>; // D(12) と F(13) の物理位置
-            bindings = <&kp LANG2>;  // Macの英数キー / WindowsのIMEオフ（Alt+`）相当
+            key-positions = <12 13>;
+            bindings = <&kp LANG2>;
         };
 
         // ② 右手 J + K 同時押しで「日本語入力」に切り替え
         combo_lang_ja {
             timeout-ms = <50>;
-            key-positions = <16 17>; // J(16) と K(17) の物理位置
-            bindings = <&kp LANG1>;  // Macのかなキー / WindowsのIMEオン（ひらがな）相当
+            key-positions = <16 17>;
+            bindings = <&kp LANG1>;
         };
     };
 
@@ -42,6 +42,16 @@
         bindings = <&mo>, <&to_layer_0>;
         #binding-cells = <2>;
         tapping-term-ms = <200>;
+    };
+
+    // 【★ここを追加】トラックボールを動かしたときに、自動でMOUSEレイヤー（レイヤー6）に切り替える設定
+    trackball_listener {
+        compatible = "zmk,input-listener";
+        device = <&pd0>; // 元リポジトリで定義されているトラックボールセンサーのID
+        layers = <0 1 2 3 4 5>; // どのレイヤーにいても反応する設定
+        
+        // トラックボールが動いたら MOUSE（レイヤー6）を一時的に有効にする
+        bindings = <&ib_tog_layer MOUSE>; 
     };
 };
 
@@ -110,7 +120,6 @@
         };
 
         // レイヤー 6：MOUSE（トラックボール操作用）
-        // クリック以外の通常キーを押すと、文字を入力しつつ自動で通常レイヤー(0)に戻ります
         MOUSE {
             bindings = <
 &to_layer_0 Q             &to_layer_0 W      &to_layer_0 E      &to_layer_0 R         &to_layer_0 T           &to_layer_0 Y        &to_layer_0 U          &to_layer_0 I        &to_layer_0 O              &to_layer_0 P
